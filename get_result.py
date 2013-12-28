@@ -31,6 +31,8 @@ mysheet = mysheet_write.get_sheet(0)
 mysheet.write(0, 0, "Name")
 mysheet.write(0, 1, "Roll number")
 mysheet.write(0, 2, "Gpa")
+tempr = open("tempfile1","r")
+temp_gpar = open("tempfile2","r")
 for line in string.split(output, '\n'):
         if regex_rollnum in line:
                 text1 = "  Roll number  : " + ((line.split(">")[3]).split("<"))[0]
@@ -48,4 +50,84 @@ for line in string.split(output, '\n'):
                 fileio.write("\n")
                 fileio.write("\n")
                 mysheet.write(count, 2, ((line.split(">")[3]).split("<"))[0])
+                v1 = str(int(tempr.readline())+1)
+                tempr.close()
+                tempw = open("tempfile1","w")
+                tempw.write(v1)
+                tempw.close()
+                cur_gpa = float(temp_gpar.readline())+float(((line.split(">")[3]).split("<"))[0])
+                temp_gpar.close()
+                temp_gpaw = open("tempfile2","w")
+                temp_gpaw.write(str(cur_gpa))
+                temp_gpaw.close()
+                if(float(((line.split(">")[3]).split("<"))[0]) == 10.00):
+                	t1 = open("ten","r")
+                	t1value = t1.readline()
+                	t1.close()
+                	t2 = open("ten","w")
+                	try:
+                		t11 = int(t1value) + 1
+                		
+                		t2.write(str(t11))
+                		t2.close()
+                	except ValueError:
+                		pass
+                elif(float(((line.split(">")[3]).split("<"))[0]) >=9.00):
+                	t1 = open("nine","r")
+                	t1value = t1.readline()
+                	t1.close()
+                	t2 = open("nine","w")
+                	try:
+                		t11 = int(t1value) + 1
+                		
+                		t2.write(str(t11))
+                		t2.close()
+                	except ValueError:
+                		pass
+                elif(float(((line.split(">")[3]).split("<"))[0]) >=8.00):
+                	t1 = open("eight","r")
+                	t1value = t1.readline()
+                	t1.close()
+                	t2 = open("eight","w")
+                	try:
+                		t11 = int(t1value) + 1
+                		
+                		t2.write(str(t11))
+                		t2.close()
+                	except ValueError:
+                		pass
+                elif(float(((line.split(">")[3]).split("<"))[0]) >=7.00):
+                	t1 = open("seven","r")
+                	t1value = t1.readline()
+                	t1.close()
+                	t2 = open("seven","w")
+                	try:
+                		t11 = int(t1value) + 1
+        
+                		t2.write(str(t11))
+                		t2.close()
+                	except ValueError:
+                		pass
+                elif(float(((line.split(">")[3]).split("<"))[0]) >=6.00):
+                	t1 = open("six","r")
+                	t1value = t1.readline()
+                	t1.close()
+                	t2 = open("six","w")
+                	try:
+                		t11 = int(t1value) + 1
+                		t2.write(str(t11))
+                		t2.close()
+                	except ValueError:
+                		pass
+                elif(float(((line.split(">")[3]).split("<"))[0]) >=5.00):
+                	t1 = open("five","r")
+                	t1value = t1.readline()
+                	t1.close()
+                	t2 = open("five","w")
+                	try:
+                		t11 = int(t1value) + 1
+                		t2.write(str(t11))
+                		t2.close()
+                	except ValueError:
+                		pass
 mysheet_write.save("result.xls")
