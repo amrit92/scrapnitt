@@ -31,7 +31,7 @@ temp6.close()
 temp5 = open("five","w")
 temp5.write("0")
 temp5.close()
-for j in xrange(1,10):
+for j in xrange(1,107):
         newvalue = str(value + j)
         subprocess.call(" python get_result.py "+newvalue, shell=True)
 temp1 = open("tempfile1","r")
