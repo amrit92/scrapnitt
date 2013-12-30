@@ -178,7 +178,7 @@ def main_function(dept, year, sem):
 	temp5 = open("temporary_files/five","w")
 	temp5.write("0")
 	temp5.close()
-	for j in xrange(1,107):
+	for j in range(1,10):
         	newvalue = str(int(value) + j)
         	get_result(newvalue,sem,dept,year)
 	temp1 = open("temporary_files/tempfile1","r")
@@ -230,6 +230,8 @@ def main_function(dept, year, sem):
 def call_function(value):
 	year = "110"
 	sem = "88"
+	if not sem:
+		print "yessss"
 	var1.set("status : started")
 	if(str(var2.get()) == "2013"):
 		year = "110"
@@ -245,6 +247,7 @@ def call_function(value):
 		subprocess.call("python run.py", shell=True)
 	if(str(var3.get()) == "0" and year == "110" ):
 		sem = "88"
+	tkMessageBox.showinfo("Started","Click ok to start. This window will be closed once the process is completed.")
 	if(value == "Architecture"):
 		main_function("101",year,sem);
 	elif(value == "Chemical"):
@@ -279,7 +282,7 @@ def helpcontent():
 def showabout():
 	tkMessageBox.showinfo("About", "(c)2014 GNU-GPL License, Authors - Amrit sahoo (amritsahoo@gmail.com), Billa Prashanth Reddy (prashanthreddybilla@gmail.com)")
 def displayOption():
-	var1.set("status : started")
+	
 	button.config(state='disabled')
 	call_function(optionMenuWidget.cget("text"))
    
