@@ -6,7 +6,7 @@ NITT Result Scraper
 @author : Billa Prashanth Reddy (prashanthreddybilla@gmail.com), CSE, NIT Trichy, 2010-14
 
 
-Copyright (C) 2007 Free Software Foundation, Inc. <http://fsf.org/>
+Copyright (C) 2014 Amrit Sahoo, Billa Prashanth Reddy 
 Everyone is permitted to copy and distribute verbatim copies of this license document, but changing it is not allowed.
 
 '''
