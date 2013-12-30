@@ -22,121 +22,123 @@ def get_result(newvalue, sem, dept, year):
 	br.select_form("Form1")
 	br.set_all_readonly(False)
 	br["__EVENTTARGET"] = 'Dt1'
-	br["Dt1"]=[sem]
-	br.find_control("Button1").disabled = True
-	output = br.submit().read()
-	count = int(newvalue) - int(dept+year+"000")
-	regex_gpa = "id=\"LblGPA\""
-	regex_rollnum = "id=\"LblEnrollmentNo\""
-	regex_name = "id=\"LblName\""
-	fileio = open("Result/OUTPUT.doc","a")
-	workbook = xlrd.open_workbook('Result/result.xls')
-	mysheet_read = workbook.sheet_by_index(0)
-	mysheet_write = copy(workbook)
-	mysheet = mysheet_write.get_sheet(0)
-	mysheet.write(0, 0, "Name")
-	mysheet.write(0, 1, "Roll number")
-	mysheet.write(0, 2, "Gpa")
-	tempr = open("temporary_files/tempfile1","r")
-	temp_gpar = open("temporary_files/tempfile2","r")
-	for line in string.split(output, '\n'):
-        	if regex_rollnum in line:
-                	text1 = "  Roll number  : " + ((line.split(">")[3]).split("<"))[0]
-                	fileio.write(text1)
-                	fileio.write("\n")
-                	mysheet.write(count, 1, ((line.split(">")[3]).split("<"))[0])
-        	elif regex_name in line:
-                	text2 = "  Name  : " + ((line.split(">")[3]).split("<"))[0]
-                	fileio.write(text2)
-                	fileio.write("\n")
-                	mysheet.write(count, 0, ((line.split(">")[3]).split("<"))[0])
-        	elif regex_gpa in line:
-                	text3 = "  GPA  : " + ((line.split(">")[3]).split("<"))[0]
-                	fileio.write(text3)
-                	fileio.write("\n")
-                	fileio.write("\n")
-                	mysheet.write(count, 2, ((line.split(">")[3]).split("<"))[0])
-                	v1 = str(int(tempr.readline())+1)
-                	tempr.close()
-                	tempw = open("temporary_files/tempfile1","w")
-                	tempw.write(v1)
-                	tempw.close()
-                	cur_gpa = float(temp_gpar.readline())+float(((line.split(">")[3]).split("<"))[0])
-                	temp_gpar.close()
-                	temp_gpaw = open("temporary_files/tempfile2","w")
-                	temp_gpaw.write(str(cur_gpa))
-                	temp_gpaw.close()
-                	if(float(((line.split(">")[3]).split("<"))[0]) == 10.00):
-                		t1 = open("temporary_files/ten","r")
-                		t1value = t1.readline()
-                		t1.close()
-                		t2 = open("temporary_files/ten","w")
-                		try:
-                			t11 = int(t1value) + 1
-                		
-                			t2.write(str(t11))
-                			t2.close()
-                		except ValueError:
-                			pass
-                	elif(float(((line.split(">")[3]).split("<"))[0]) >=9.00):
-                		t1 = open("temporary_files/nine","r")
-                		t1value = t1.readline()
-                		t1.close()
-                		t2 = open("temporary_files/nine","w")
-                		try:
-                			t11 = int(t1value) + 1
-                		
-                			t2.write(str(t11))
-                			t2.close()
-                		except ValueError:
-                			pass
-                	elif(float(((line.split(">")[3]).split("<"))[0]) >=8.00):
-                		t1 = open("temporary_files/eight","r")
-                		t1value = t1.readline()
-                		t1.close()
-                		t2 = open("temporary_files/eight","w")
-                		try:
-                			t11 = int(t1value) + 1
-                		
-                			t2.write(str(t11))
-                			t2.close()
-                		except ValueError:
-                			pass
-                	elif(float(((line.split(">")[3]).split("<"))[0]) >=7.00):
-                		t1 = open("temporary_files/seven","r")
-                		t1value = t1.readline()
-                		t1.close()
-                		t2 = open("temporary_files/seven","w")
-                		try:
-                			t11 = int(t1value) + 1
-        
-                			t2.write(str(t11))
-                			t2.close()
-                		except ValueError:
-                			pass
-                	elif(float(((line.split(">")[3]).split("<"))[0]) >=6.00):
-                		t1 = open("temporary_files/six","r")
-                		t1value = t1.readline()
-                		t1.close()
-                		t2 = open("temporary_files/six","w")
-                		try:
-                			t11 = int(t1value) + 1
-                			t2.write(str(t11))
-                			t2.close()
-                		except ValueError:
-                			pass
-                	elif(float(((line.split(">")[3]).split("<"))[0]) >=5.00):
-                		t1 = open("temporary_files/five","r")
-                		t1value = t1.readline()
-                		t1.close()
-                		t2 = open("temporary_files/five","w")
-                		try:
-                			t11 = int(t1value) + 1
-                			t2.write(str(t11))
-                			t2.close()
-                		except ValueError:
-                			pass
-	mysheet_write.save("Result/result.xls")
+	control = br.form.find_control("Dt1")
+	if(sem in control.items):	
+		br["Dt1"]=[sem]
+		br.find_control("Button1").disabled = True
+		output = br.submit().read()
+		count = int(newvalue) - int(dept+year+"000")
+		regex_gpa = "id=\"LblGPA\""
+		regex_rollnum = "id=\"LblEnrollmentNo\""
+		regex_name = "id=\"LblName\""
+		fileio = open("Result/OUTPUT.doc","a")
+		workbook = xlrd.open_workbook('Result/result.xls')
+		mysheet_read = workbook.sheet_by_index(0)
+		mysheet_write = copy(workbook)
+		mysheet = mysheet_write.get_sheet(0)
+		mysheet.write(0, 0, "Name")
+		mysheet.write(0, 1, "Roll number")
+		mysheet.write(0, 2, "Gpa")
+		tempr = open("temporary_files/tempfile1","r")
+		temp_gpar = open("temporary_files/tempfile2","r")
+		for line in string.split(output, '\n'):
+			if regex_rollnum in line:
+		        	text1 = "  Roll number  : " + ((line.split(">")[3]).split("<"))[0]
+		        	fileio.write(text1)
+		        	fileio.write("\n")
+		        	mysheet.write(count, 1, ((line.split(">")[3]).split("<"))[0])
+			elif regex_name in line:
+		        	text2 = "  Name  : " + ((line.split(">")[3]).split("<"))[0]
+		        	fileio.write(text2)
+		        	fileio.write("\n")
+		        	mysheet.write(count, 0, ((line.split(">")[3]).split("<"))[0])
+			elif regex_gpa in line:
+		        	text3 = "  GPA  : " + ((line.split(">")[3]).split("<"))[0]
+		        	fileio.write(text3)
+		        	fileio.write("\n")
+		        	fileio.write("\n")
+		        	mysheet.write(count, 2, ((line.split(">")[3]).split("<"))[0])
+		        	v1 = str(int(tempr.readline())+1)
+		        	tempr.close()
+		        	tempw = open("temporary_files/tempfile1","w")
+		        	tempw.write(v1)
+		        	tempw.close()
+		        	cur_gpa = float(temp_gpar.readline())+float(((line.split(">")[3]).split("<"))[0])
+		        	temp_gpar.close()
+		        	temp_gpaw = open("temporary_files/tempfile2","w")
+		        	temp_gpaw.write(str(cur_gpa))
+		        	temp_gpaw.close()
+		        	if(float(((line.split(">")[3]).split("<"))[0]) == 10.00):
+		        		t1 = open("temporary_files/ten","r")
+		        		t1value = t1.readline()
+		        		t1.close()
+		        		t2 = open("temporary_files/ten","w")
+		        		try:
+		        			t11 = int(t1value) + 1
+		        		
+		        			t2.write(str(t11))
+		        			t2.close()
+		        		except ValueError:
+		        			pass
+		        	elif(float(((line.split(">")[3]).split("<"))[0]) >=9.00):
+		        		t1 = open("temporary_files/nine","r")
+		        		t1value = t1.readline()
+		        		t1.close()
+		        		t2 = open("temporary_files/nine","w")
+		        		try:
+		        			t11 = int(t1value) + 1
+		        		
+		        			t2.write(str(t11))
+		        			t2.close()
+		        		except ValueError:
+		        			pass
+		        	elif(float(((line.split(">")[3]).split("<"))[0]) >=8.00):
+		        		t1 = open("temporary_files/eight","r")
+		        		t1value = t1.readline()
+		        		t1.close()
+		        		t2 = open("temporary_files/eight","w")
+		        		try:
+		        			t11 = int(t1value) + 1
+		        		
+		        			t2.write(str(t11))
+		        			t2.close()
+		        		except ValueError:
+		        			pass
+		        	elif(float(((line.split(">")[3]).split("<"))[0]) >=7.00):
+		        		t1 = open("temporary_files/seven","r")
+		        		t1value = t1.readline()
+		        		t1.close()
+		        		t2 = open("temporary_files/seven","w")
+		        		try:
+		        			t11 = int(t1value) + 1
+		
+		        			t2.write(str(t11))
+		        			t2.close()
+		        		except ValueError:
+		        			pass
+		        	elif(float(((line.split(">")[3]).split("<"))[0]) >=6.00):
+		        		t1 = open("temporary_files/six","r")
+		        		t1value = t1.readline()
+		        		t1.close()
+		        		t2 = open("temporary_files/six","w")
+		        		try:
+		        			t11 = int(t1value) + 1
+		        			t2.write(str(t11))
+		        			t2.close()
+		        		except ValueError:
+		        			pass
+		        	elif(float(((line.split(">")[3]).split("<"))[0]) >=5.00):
+		        		t1 = open("temporary_files/five","r")
+		        		t1value = t1.readline()
+		        		t1.close()
+		        		t2 = open("temporary_files/five","w")
+		        		try:
+		        			t11 = int(t1value) + 1
+		        			t2.write(str(t11))
+		        			t2.close()
+		        		except ValueError:
+		        			pass
+		mysheet_write.save("Result/result.xls")
 
 
 
@@ -178,7 +180,7 @@ def main_function(dept, year, sem):
 	temp5 = open("temporary_files/five","w")
 	temp5.write("0")
 	temp5.close()
-	for j in range(1,10):
+	for j in range(1,107):
         	newvalue = str(int(value) + j)
         	get_result(newvalue,sem,dept,year)
 	temp1 = open("temporary_files/tempfile1","r")
@@ -229,23 +231,21 @@ def main_function(dept, year, sem):
 	
 def call_function(value):
 	year = "110"
-	sem = "88"
-	if not sem:
-		print "yessss"
+	sem = "none"
 	var1.set("status : started")
 	if(str(var2.get()) == "2013"):
 		year = "110"
 	if(str(var2.get()) == "2012"):
 		year = "109"
-	if(str(var3.get()) == "1" and year == "109" ):
+	if(str(var3.get()) == "2" and year == "109" ):
 		sem = "84"
-	if(str(var3.get()) == "0" and year == "109" ):
+	if(str(var3.get()) == "1" and year == "109" ):
 		sem = "77"
-	if(str(var3.get()) == "1" and year == "110" ):
+	if(str(var3.get()) == "2" and year == "110" ):
 		tkMessageBox.showinfo("Not yet", "results are not yet out")
 		frame.destroy()
 		subprocess.call("python run.py", shell=True)
-	if(str(var3.get()) == "0" and year == "110" ):
+	if(str(var3.get()) == "1" and year == "110" ):
 		sem = "88"
 	tkMessageBox.showinfo("Started","Click ok to start. This window will be closed once the process is completed.")
 	if(value == "Architecture"):
@@ -266,6 +266,8 @@ def call_function(value):
 		main_function("111",year,sem);
 	elif(value == "Production"):
 		main_function("114",year,sem);
+	elif(value == "Metallurgy"):
+		main_function("112",year,sem);
 	elif(value == "MCA"):
 		main_function("205",year,sem);
 	
@@ -294,7 +296,7 @@ def quitapp():
 		frame.destroy()
 	
 frame = Tk()
-DEFAULTVALUE_OPTION = "Architecture"    
+DEFAULTVALUE_OPTION = "Select department"    
     
 frame.title("Nitt result scraper")
 frame["padx"] = 60
