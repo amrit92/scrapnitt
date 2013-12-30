@@ -1,3 +1,16 @@
+'''
+NITT Result Scraper
+
+
+@author : Amrit Sahoo (amritsahoo@gmail.com), CSE, NIT Trichy, 2010-14
+@author : Billa Prashanth Reddy (prashanthreddybilla@gmail.com), CSE, NIT Trichy, 2010-14
+
+
+Copyright (C) 2007 Free Software Foundation, Inc. <http://fsf.org/>
+Everyone is permitted to copy and distribute verbatim copies of this license document, but changing it is not allowed.
+
+'''
+
 import subprocess
 import xlwt
 import os
