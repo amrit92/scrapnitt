@@ -60,8 +60,8 @@ def get_result(newvalue, sem, dept, year):
 				mysheet.write(0, 0, "Name")
 				mysheet.write(0, 1, "Roll number")
 				mysheet.write(0, 2, "Gpa")
-				tempr = open("temporary_files/tempfile1","r")
-				temp_gpar = open("temporary_files/tempfile2","r")
+				tempr = open("temporary_files/tempfile1.txt","r")
+				temp_gpar = open("temporary_files/tempfile2.txt","r")
 				for line in string.split(output, '\n'):
 					if regex_rollnum in line:
 						text1 = "  Roll number  : " + ((line.split(">")[3]).split("<"))[0]
@@ -81,19 +81,19 @@ def get_result(newvalue, sem, dept, year):
 						mysheet.write(count, 2, ((line.split(">")[3]).split("<"))[0])
 						v1 = str(int(tempr.readline())+1)
 						tempr.close()
-						tempw = open("temporary_files/tempfile1","w")
+						tempw = open("temporary_files/tempfile1.txt","w")
 						tempw.write(v1)
 						tempw.close()
 						cur_gpa = float(temp_gpar.readline())+float(((line.split(">")[3]).split("<"))[0])
 						temp_gpar.close()
-						temp_gpaw = open("temporary_files/tempfile2","w")
+						temp_gpaw = open("temporary_files/tempfile2.txt","w")
 						temp_gpaw.write(str(cur_gpa))
 						temp_gpaw.close()
 						if(float(((line.split(">")[3]).split("<"))[0]) == 10.00):
-							t1 = open("temporary_files/ten","r")
+							t1 = open("temporary_files/ten.txt","r")
 							t1value = t1.readline()
 							t1.close()
-							t2 = open("temporary_files/ten","w")
+							t2 = open("temporary_files/ten.txt","w")
 							try:
 								t11 = int(t1value) + 1
 						
@@ -102,10 +102,10 @@ def get_result(newvalue, sem, dept, year):
 							except ValueError:
 								pass
 						elif(float(((line.split(">")[3]).split("<"))[0]) >=9.00):
-							t1 = open("temporary_files/nine","r")
+							t1 = open("temporary_files/nine.txt","r")
 							t1value = t1.readline()
 							t1.close()
-							t2 = open("temporary_files/nine","w")
+							t2 = open("temporary_files/nine.txt")
 							try:
 								t11 = int(t1value) + 1
 						
@@ -114,10 +114,10 @@ def get_result(newvalue, sem, dept, year):
 							except ValueError:
 								pass
 						elif(float(((line.split(">")[3]).split("<"))[0]) >=8.00):
-							t1 = open("temporary_files/eight","r")
+							t1 = open("temporary_files/eight.txt","r")
 							t1value = t1.readline()
 							t1.close()
-							t2 = open("temporary_files/eight","w")
+							t2 = open("temporary_files/eight.txt","w")
 							try:
 								t11 = int(t1value) + 1
 						
@@ -126,10 +126,10 @@ def get_result(newvalue, sem, dept, year):
 							except ValueError:
 								pass
 						elif(float(((line.split(">")[3]).split("<"))[0]) >=7.00):
-							t1 = open("temporary_files/seven","r")
+							t1 = open("temporary_files/seven.txt","r")
 							t1value = t1.readline()
 							t1.close()
-							t2 = open("temporary_files/seven","w")
+							t2 = open("temporary_files/seven.txt","w")
 							try:
 								t11 = int(t1value) + 1
 		
@@ -138,10 +138,10 @@ def get_result(newvalue, sem, dept, year):
 							except ValueError:
 								pass
 						elif(float(((line.split(">")[3]).split("<"))[0]) >=6.00):
-							t1 = open("temporary_files/six","r")
+							t1 = open("temporary_files/six.txt","r")
 							t1value = t1.readline()
 							t1.close()
-							t2 = open("temporary_files/six","w")
+							t2 = open("temporary_files/six.txt","w")
 							try:
 								t11 = int(t1value) + 1
 								t2.write(str(t11))
@@ -149,10 +149,10 @@ def get_result(newvalue, sem, dept, year):
 							except ValueError:
 								pass
 						elif(float(((line.split(">")[3]).split("<"))[0]) >=5.00):
-							t1 = open("temporary_files/five","r")
+							t1 = open("temporary_files/five.txt","r")
 							t1value = t1.readline()
 							t1.close()
-							t2 = open("temporary_files/five","w")
+							t2 = open("temporary_files/five.txt","w")
 							try:
 								t11 = int(t1value) + 1
 								t2.write(str(t11))
@@ -163,7 +163,7 @@ def get_result(newvalue, sem, dept, year):
 		return 1
 	except mechanize.ControlNotFoundError:
 		return 1
-	except urllib2.URLError:
+	except URLError:
 		return -1
 	
 	
@@ -182,28 +182,28 @@ def main_function(dept, year, sem):
 	col1 = sheet1.col(0)
 	col1.width = 256*40
 	book.save("Result/result.xls")
-	temp1 = open("temporary_files/tempfile1","w")
+	temp1 = open("temporary_files/tempfile1.txt","w")
 	temp1.write("0")
 	temp1.close()
-	temp2 = open("temporary_files/tempfile2","w")
+	temp2 = open("temporary_files/tempfile2.txt","w")
 	temp2.write("0")
 	temp2.close()
-	temp10 = open("temporary_files/ten","w")
+	temp10 = open("temporary_files/ten.txt","w")
 	temp10.write("0")
 	temp10.close()
-	temp9 = open("temporary_files/nine","w")
+	temp9 = open("temporary_files/nine.txt","w")
 	temp9.write("0")
 	temp9.close()
-	temp8 = open("temporary_files/eight","w")
+	temp8 = open("temporary_files/eight.txt","w")
 	temp8.write("0")
 	temp8.close()
-	temp7 = open("temporary_files/seven","w")
+	temp7 = open("temporary_files/seven.txt","w")
 	temp7.write("0")
 	temp7.close()
-	temp6 = open("temporary_files/six","w")
+	temp6 = open("temporary_files/six.txt","w")
 	temp6.write("0")
 	temp6.close()
-	temp5 = open("temporary_files/five","w")
+	temp5 = open("temporary_files/five.txt","w")
 	temp5.write("0")
 	temp5.close()
 	for j in range(1,107):
@@ -213,8 +213,8 @@ def main_function(dept, year, sem):
         		continue;
         	while(returnval == -1):
         		returnval = get_result(newvalue,sem,dept,year)
-	temp1 = open("temporary_files/tempfile1","r")
-	temp2 = open("temporary_files/tempfile2","r")
+	temp1 = open("temporary_files/tempfile1.txt","r")
+	temp2 = open("temporary_files/tempfile2.txt","r")
 	no = float(temp1.readline())
 	total = float(temp2.readline())
 	avg = total/no
@@ -231,12 +231,12 @@ def main_function(dept, year, sem):
 	fileavg.write("\n\n")
 	fileavg.write("Average GPA = "+str(avg))
 	fileavg.write("\n\n")
-	temp10 = open("temporary_files/ten","r")
-	temp9 = open("temporary_files/nine","r")
-	temp8 = open("temporary_files/eight","r")
-	temp7 = open("temporary_files/seven","r")
-	temp6 = open("temporary_files/six","r")
-	temp5 = open("temporary_files/five","r")
+	temp10 = open("temporary_files/ten.txt","r")
+	temp9 = open("temporary_files/nine.txt","r")
+	temp8 = open("temporary_files/eight.txt","r")
+	temp7 = open("temporary_files/seven.txt","r")
+	temp6 = open("temporary_files/six.txt","r")
+	temp5 = open("temporary_files/five.txt","r")
 	fileavg.write("No. of 10 pointers : "+temp10.readline())
 	fileavg.write("\n")
 	fileavg.write("No. of 9 pointers : "+temp9.readline())
@@ -257,14 +257,14 @@ def main_function(dept, year, sem):
 	temp5.close()
 	tkMessageBox.showinfo("Complete :)",'Check out the result folder.')
 	var1.set("status : completed")
-	os.remove("temporary_files/tempfile1")
-	os.remove("temporary_files/tempfile2")
-	os.remove("temporary_files/ten")
-	os.remove("temporary_files/nine")
-	os.remove("temporary_files/eight")
-	os.remove("temporary_files/seven")
-	os.remove("temporary_files/six")
-	os.remove("temporary_files/five")
+	os.remove("temporary_files/tempfile1.txt")
+	os.remove("temporary_files/tempfile2.txt")
+	os.remove("temporary_files/ten.txt")
+	os.remove("temporary_files/nine.txt")
+	os.remove("temporary_files/eight.txt")
+	os.remove("temporary_files/seven.txt")
+	os.remove("temporary_files/six.txt")
+	os.remove("temporary_files/five.txt")
 	os.rmdir("temporary_files")
 	complete = 1
 	frame.destroy()
@@ -292,7 +292,7 @@ def call_function(value):
 		subprocess.call("python run.py", shell=True)
 	if(str(var3.get()) == "2" and year == "110" ):
 		sem = "88"
-	tkMessageBox.showinfo("Started","Click ok to start. This window will be closed once the process is completed.")
+	tkMessageBox.showinfo("Started","Click ok to start. You will be notified once the process is completed.")
 	if(value == "Architecture"):
 		main_function("101",year,sem);
 	elif(value == "Chemical"):
@@ -346,7 +346,11 @@ DEFAULTVALUE_OPTION = "Select department"
 frame.title("Nitt result scraper")
 frame["padx"] = 60
 frame["pady"] = 40       
-  
+frame.wm_iconbitmap(bitmap = "nitt.ico")
+photo = PhotoImage(file="nitt.gif")
+w = Label(frame, image=photo)
+w.photo = photo
+w.pack()
 optionFrame = Frame(frame)
     
 optionLabel = Label(optionFrame)
