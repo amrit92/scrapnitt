@@ -10,10 +10,11 @@ Copyright (C) 2014 Amrit Sahoo, Billa Prashanth Reddy
 Everyone is permitted to copy and distribute verbatim copies of this license document, but changing it is not allowed.
 
 '''
-
+import thread
 import subprocess
 import xlwt
 import os
+from time import sleep
 import string
 import mechanize
 import xlutils
@@ -25,16 +26,25 @@ import sys
 from Tkinter import *
 import tkMessageBox
 import ttk
+import socket
 complete = 1
 def get_result(newvalue, sem, dept, year, name, vyear, vsem):
-	br = mechanize.Browser()
-	br.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1')]
-	br.open('http://nitt.edu/prm/nitreg/ShowRes.aspx')
-	br.select_form("Form1")
-	br["TextBox1"]= newvalue
-	response = br.submit()
-	br.select_form("Form1")
-	br.set_all_readonly(False)
+	try:
+		br = mechanize.Browser()
+		br.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1')]
+		br.open('http://nitt.edu/prm/nitreg/ShowRes.aspx',timeout=800.0)
+		br.select_form("Form1")
+		br["TextBox1"]= newvalue
+		response = br.submit()
+		br.select_form("Form1")
+		br.set_all_readonly(False)
+	except urllib2.URLError:
+		print "Temporary problem at server. Trying again..."
+		sleep(5)
+		return -1
+	except urllib2.HTTPError:
+		#print "Server down. Trying again..."
+		return 2
 	#br["__EVENTTARGET"] = 'Dt1'
 	try:
 		control = br.form.find_control("Dt1")
@@ -166,10 +176,10 @@ def get_result(newvalue, sem, dept, year, name, vyear, vsem):
 	except mechanize.ControlNotFoundError:
 		return 1
 	except urllib2.URLError:
+		print "Server refused the request. Trying again for the roll number : "+((line.split(">")[3]).split("<"))[0]
+		sleep(5)
 		return -1
-	
-	
-
+		
 def main_function(dept, year, sem, name, vyear, vsem):
 	
 	if not os.path.exists("temporary_files"):
@@ -216,8 +226,12 @@ def main_function(dept, year, sem, name, vyear, vsem):
         	returnval = get_result(newvalue,sem,dept,year,name,vyear,vsem)
         	if(returnval == 1):
         		continue;
+			if(returnval == 2):
+				print "Server is unavailable. Try again later"
+				sys.exit(0)
         	while(returnval == -1):
-        		returnval = get_result(newvalue,sem,dept,year,name,vyear,vsem)
+				if(returnval == -1):
+					returnval = get_result(newvalue,sem,dept,year,name,vyear,vsem)
 	temp1 = open("temporary_files/tempfile1.txt","r")
 	temp2 = open("temporary_files/tempfile2.txt","r")
 	no = float(temp1.readline())
@@ -328,8 +342,13 @@ def call_function(value):
 #####################################gui
   
 def newcommand():
-	frame.destroy()
-	subprocess.call("run.exe", shell=True)
+	if(complete == 0):
+		if tkMessageBox.askyesno("New",'Process is not complete. Start a new process?'):
+			frame.destroy()
+	else:
+		frame.destroy()
+		subprocess.call("run.exe", shell=True)
+	
 def showl():
 	tkMessageBox.showinfo("GNU-GPL","This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.")
 def helpcontent():
@@ -344,10 +363,12 @@ def displayOption():
    
 def quitapp():
 	if(complete == 0):
-		if tkMessageBox.askyesno("quit",'Project is not saved. Ignore changes and quit?'):
+		if tkMessageBox.askyesno("quit",'Process is not complete. Quit?'):
 			frame.destroy()
 	else:
 		frame.destroy()
+
+
 	
 frame = Tk()
 DEFAULTVALUE_OPTION = "Select department"    
