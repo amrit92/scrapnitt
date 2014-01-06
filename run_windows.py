@@ -38,10 +38,21 @@ def get_result(newvalue, sem, dept, year, name, vyear, vsem):
 		response = br.submit()
 		br.select_form("Form1")
 		br.set_all_readonly(False)
-	except urllib2.URLError:
-		print "Temporary problem at server. Trying again..."
-		sleep(5)
-		return -1
+		error_code=""
+	except urllib2.URLError, e:
+		error_code =  (str(e.reason).split("]")[0]).split(" ")[1]
+		if(error_code == "10060"):
+			print "Temporary problem at server. Trying again..."
+			sleep(5)
+			return -1
+		elif(error_code == "11004"):
+			print "Problem with your internet connection. Please check your connection. Trying again..."
+			sleep(5)
+			return -1
+		else:
+			print "Problem at the Server. Trying again..."
+			sleep(5)
+			return -1
 	except urllib2.HTTPError:
 		#print "Server down. Trying again..."
 		return 2
@@ -73,7 +84,9 @@ def get_result(newvalue, sem, dept, year, name, vyear, vsem):
 				mysheet.write(0, 2, "Gpa")
 				tempr = open("temporary_files/tempfile1.txt","r")
 				temp_gpar = open("temporary_files/tempfile2.txt","r")
+				myline = ""
 				for line in string.split(output, '\n'):
+					myline = line
 					if regex_rollnum in line:
 						text1 = "  Roll number  : " + ((line.split(">")[3]).split("<"))[0]
 						fileio.write(text1)
@@ -176,7 +189,7 @@ def get_result(newvalue, sem, dept, year, name, vyear, vsem):
 	except mechanize.ControlNotFoundError:
 		return 1
 	except urllib2.URLError:
-		print "Server refused the request. Trying again for the roll number : "+((line.split(">")[3]).split("<"))[0]
+		print "Server refused the request. Trying again for the roll number : "+((myline.split(">")[3]).split("<"))[0]
 		sleep(5)
 		return -1
 		
@@ -220,7 +233,7 @@ def main_function(dept, year, sem, name, vyear, vsem):
 	temp5 = open("temporary_files/five.txt","w")
 	temp5.write("0")
 	temp5.close()
-	for j in range(1,107):
+	for j in range(1,110):
         	newvalue = str(int(value) + j)
 		print newvalue+" in progress"
         	returnval = get_result(newvalue,sem,dept,year,name,vyear,vsem)
@@ -274,17 +287,10 @@ def main_function(dept, year, sem, name, vyear, vsem):
 	temp7.close()
 	temp6.close()
 	temp5.close()
+	print "Process complete! Check out the Result folder"
+	print "Thank You for using the App"
 	tkMessageBox.showinfo("Complete :)",'Check out the result folder.')
 	var1.set("status : completed")
-	os.remove("temporary_files/tempfile1.txt")
-	os.remove("temporary_files/tempfile2.txt")
-	os.remove("temporary_files/ten.txt")
-	os.remove("temporary_files/nine.txt")
-	os.remove("temporary_files/eight.txt")
-	os.remove("temporary_files/seven.txt")
-	os.remove("temporary_files/six.txt")
-	os.remove("temporary_files/five.txt")
-	os.rmdir("temporary_files")
 	complete = 1
 	frame.destroy()
 	
@@ -315,7 +321,7 @@ def call_function(value):
 		subprocess.call("run.exe", shell=True)
 	if(str(var3.get()) == "2" and year == "110" ):
 		sem = "88"
-	tkMessageBox.showinfo("Started","Click ok to start. You will be notified once the process is completed.")
+	tkMessageBox.showinfo("Process about to start","Click ok to start. You will be notified once the process is completed. Note: The process will run for 110 students by default as the exact number of students in a class is not accurately known.")
 	if(value == "Architecture"):
 		main_function("101",year,sem,value,str(var2.get()),semname);
 	elif(value == "Chemical"):
@@ -352,7 +358,7 @@ def newcommand():
 def showl():
 	tkMessageBox.showinfo("GNU-GPL","This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.")
 def helpcontent():
-	content = "Select your department, current year, and semester to get the Grade point average of all the students in the class. The results are saved in a doc file as well as an excel file in the current folder of the exe file. Also statistics.doc is created at the end of the process to give more information about the class performance. Incase of any queries, please contact (amritsahoo@gmail.com) / (prashanthreddybilla@gmail.com)"
+	content = "Select your department, current year, and semester to get the Grade point average of all the students in the class. The results are saved in a doc file as well as an excel file in the Results folder. Also statistics.doc is created at the end of the process to give more information about the class performance. Incase of any queries, please contact (amritsahoo@gmail.com) / (prashanthreddybilla@gmail.com)"
 	tkMessageBox.showinfo("About", content)
 def showabout():
 	tkMessageBox.showinfo("About", "(c)2014 GNU-GPL License, Authors - Amrit sahoo (amritsahoo@gmail.com), Prashanth Reddy Billa(prashanthreddybilla@gmail.com)")
