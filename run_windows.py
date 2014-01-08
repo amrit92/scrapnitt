@@ -29,10 +29,12 @@ import ttk
 import socket
 complete = 1
 def get_result(newvalue, sem, dept, year, name, vyear, vsem):
+	myline = ""
 	try:
+		#socket.setdefaulttimeout(10)
 		br = mechanize.Browser()
 		br.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1')]
-		br.open('http://nitt.edu/prm/nitreg/ShowRes.aspx',timeout=800.0)
+		br.open('http://nitt.edu/prm/nitreg/ShowRes.aspx',timeout=10.0)
 		br.select_form("Form1")
 		br["TextBox1"]= newvalue
 		response = br.submit()
@@ -55,7 +57,7 @@ def get_result(newvalue, sem, dept, year, name, vyear, vsem):
 			return -1
 	except urllib2.HTTPError:
 		#print "Server down. Trying again..."
-		return 2
+		return -1
 	#br["__EVENTTARGET"] = 'Dt1'
 	try:
 		control = br.form.find_control("Dt1")
@@ -84,7 +86,6 @@ def get_result(newvalue, sem, dept, year, name, vyear, vsem):
 				mysheet.write(0, 2, "Gpa")
 				tempr = open("temporary_files/tempfile1.txt","r")
 				temp_gpar = open("temporary_files/tempfile2.txt","r")
-				myline = ""
 				for line in string.split(output, '\n'):
 					myline = line
 					if regex_rollnum in line:
@@ -233,17 +234,13 @@ def main_function(dept, year, sem, name, vyear, vsem):
 	temp5 = open("temporary_files/five.txt","w")
 	temp5.write("0")
 	temp5.close()
-	for j in range(1,110):
+	for j in range(1,int(str(var4.get()))):
         	newvalue = str(int(value) + j)
 		print newvalue+" in progress"
         	returnval = get_result(newvalue,sem,dept,year,name,vyear,vsem)
         	if(returnval == 1):
         		continue;
-			if(returnval == 2):
-				print "Server is unavailable. Try again later"
-				sys.exit(0)
         	while(returnval == -1):
-				if(returnval == -1):
 					returnval = get_result(newvalue,sem,dept,year,name,vyear,vsem)
 	temp1 = open("temporary_files/tempfile1.txt","r")
 	temp2 = open("temporary_files/tempfile2.txt","r")
@@ -254,7 +251,7 @@ def main_function(dept, year, sem, name, vyear, vsem):
 	fileavg.write("Department code :" + dept)
 	
 	fileavg.write("\n\n")
-	fileavg.write("Year : "+ year)
+	fileavg.write("Year code: "+ year)
 	fileavg.write("\n\n")
 	if(str(var3.get()) == "1"):
 		fileavg.write("Odd semester")
@@ -321,7 +318,7 @@ def call_function(value):
 		subprocess.call("run.exe", shell=True)
 	if(str(var3.get()) == "2" and year == "110" ):
 		sem = "88"
-	tkMessageBox.showinfo("Process about to start","Click ok to start. You will be notified once the process is completed. Note: The process will run for 110 students by default as the exact number of students in a class is not accurately known.")
+	tkMessageBox.showinfo("Process about to start","Click ok to start. You will be notified once the process is completed. Note: The process will run for the specified number of students. (Default : 110)")
 	if(value == "Architecture"):
 		main_function("101",year,sem,value,str(var2.get()),semname);
 	elif(value == "Chemical"):
@@ -417,10 +414,21 @@ optionMenuWidget.pack(side=LEFT)
 
 optionFrame.pack()
 
+var5 = StringVar()
+label = Label(frame, textvariable=var5, relief=FLAT )
+
+var5.set("last roll number  (Default : 110)")
+label.pack()
+
+var4 = StringVar(frame)
+var4.set("110")
+sb = Spinbox(frame, from_=10, to=120, textvariable=var4)
+sb.pack()
+
 button = Button(frame, text="Submit", command=displayOption)
 button.pack() 
 var1 = StringVar()
-label = Label(frame, textvariable=var1, relief=RAISED )
+label = Label(frame, textvariable=var1, relief=FLAT )
 
 var1.set("status : Not started")
 label.pack()
